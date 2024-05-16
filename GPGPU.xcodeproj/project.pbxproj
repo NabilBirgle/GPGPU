@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7CB7CE412BF5DC7400EC6399 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7CE402BF5DC7400EC6399 /* main.swift */; };
+		7CB7CE482BF5DC9100EC6399 /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7CE472BF5DC9100EC6399 /* GPU.swift */; };
+		7CB7CE4A2BF5DD8B00EC6399 /* compute.metal in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7CE492BF5DD8B00EC6399 /* compute.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		7CB7CE3D2BF5DC7400EC6399 /* GPGPU */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPGPU; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB7CE402BF5DC7400EC6399 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		7CB7CE472BF5DC9100EC6399 /* GPU.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
+		7CB7CE492BF5DD8B00EC6399 /* compute.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = compute.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				7CB7CE402BF5DC7400EC6399 /* main.swift */,
+				7CB7CE472BF5DC9100EC6399 /* GPU.swift */,
+				7CB7CE492BF5DD8B00EC6399 /* compute.metal */,
 			);
 			path = GPGPU;
 			sourceTree = "<group>";
@@ -120,6 +126,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CB7CE4A2BF5DD8B00EC6399 /* compute.metal in Sources */,
+				7CB7CE482BF5DC9100EC6399 /* GPU.swift in Sources */,
 				7CB7CE412BF5DC7400EC6399 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
