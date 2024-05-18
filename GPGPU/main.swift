@@ -15,7 +15,7 @@ func computeWay(arr1: [Float], arr2: [Float]) {
 	let startTime = CFAbsoluteTimeGetCurrent()
 
 	let gpu: GPU = GPU()
-	let command_queue = Command_queue(gpu: gpu)
+	let gpgpu: GPU.GPGPU = GPU.GPGPU(gpu: gpu)
 
 	let f = "addition_compute_function"
 	let g = "reduce_function"
@@ -25,55 +25,25 @@ func computeWay(arr1: [Float], arr2: [Float]) {
 	print()
 	print("GPU Way")
 
-	var command_buffer: Command_buffer
-	var command_encoder: Compute_command_encoder
+	gpu.set_gpgpu_pipeline(function_name: f)
+	gpgpu.call_kernel_function()
+	gpgpu.set_input(arr: arr1, n: count)
+	gpgpu.set_input(arr: arr2, n: count)
+	let arr3 = gpgpu.set_output(n: count)
+	gpgpu.set_index_input(thread: count)
 
-	guard 
-		let A1: MTLBuffer = gpu.get_device()?.makeBuffer(bytes: arr1,
-											  length: MemoryLayout<Float>.size * count,
-											  options: .storageModeShared),
-		let A2: MTLBuffer = gpu.get_device()?.makeBuffer(bytes: arr2,
-											  length: MemoryLayout<Float>.size * count,
-											  options: .storageModeShared),
-		let A3: MTLBuffer = gpu.get_device()?.makeBuffer(
-											  length: MemoryLayout<Float>.size * count,
-											  options: .storageModeShared),
-		let A4: MTLBuffer = gpu.get_device()?.makeBuffer(
-											  length: MemoryLayout<Float>.size,
-											  options: .storageModeShared)
-	else {
-		return
-	}
+	gpu.set_gpgpu_pipeline(function_name: g)
+	gpgpu.call_kernel_function()
+	gpgpu.set_input(arr: arr3, n: count)
+	let arr4 = gpgpu.set_output(n: 1)
+	gpgpu.set_index_input(thread: count)
 
-	command_buffer = Command_buffer(command_queue: command_queue)
-	command_encoder = Compute_command_encoder(command_buffer: command_buffer)
-	gpu.set_compute_pipeline_state(function_name: f)
-	command_encoder.set_input(arr: A1)
-	command_encoder.set_input(arr: A2)
-	command_encoder.set_input(arr: A3)
-	command_encoder.set_index_input(thread: count, compute_pipeline_state: gpu.get_compute_pipeline_state())
-	command_encoder.end()
-	command_buffer.commit()
-
-	command_buffer = Command_buffer(command_queue: command_queue)
-	command_encoder = Compute_command_encoder(command_buffer: command_buffer)
-	gpu.set_compute_pipeline_state(function_name: g)
-	command_encoder.set_input(arr: A3)
-	command_encoder.set_input(arr: A4)
-	command_encoder.set_index_input(thread: count, compute_pipeline_state: gpu.get_compute_pipeline_state())
-	command_encoder.end()
-	command_buffer.commit()
-
-	let B3 = (A3.contents().bindMemory(
-		to: Float.self, capacity: MemoryLayout<Float>.size * count))
-	let B4 = (A4.contents().bindMemory(
-		to: Float.self, capacity: MemoryLayout<Float>.size))
 
 	// Print out all of our new added together array information
 	for i in 0..<3 {
-		print("\(arr1[i]) + \(arr2[i]) = \(B3[i])")
+		print("\(arr1[i]) + \(arr2[i]) = \(arr3[i])")
 	}
-	print("Sum(arr3) = \(B4[0])")
+	print("Sum(arr3) = \(arr4[0])")
 
 	// Print out the elapsed time
 	let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
